@@ -1,6 +1,8 @@
 package mt.edu.mcast.webapitutorial_ktor
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -67,12 +69,11 @@ fun Greeting(
 
     var mangaList by remember { mutableStateOf<List<MangaUI>>(emptyList()) }
     var query by remember { mutableStateOf("") }
-    var debouncedQuery by remember { mutableStateOf("") }
-    var debounceJob by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     var isOnCooldown by remember { mutableStateOf(false) }
 
     var scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     suspend fun loadBooks(searchQuery: String) {
         val result = repository.getBooksByTitle(searchQuery)
@@ -87,11 +88,19 @@ fun Greeting(
         )
     }
 
-    LaunchedEffect(query) {
-        debounceJob?.cancel()
-        debounceJob = scope.launch {
-            kotlinx.coroutines.delay(500)
-            debouncedQuery = query
+    fun openMihon(mangaId: String) {
+        try {
+            val intent = Intent(Intent.ACTION_SEARCH).apply {
+                `package` = "app.mihon" // Forces the system to target Mihon specifically
+
+                // Prefixes the ID with "id:" so the extension pulls it up directly
+                putExtra("query", "id:$mangaId")
+
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "Mihon not installed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -100,7 +109,16 @@ fun Greeting(
             .fillMaxSize()
             .padding(top = 50.dp, start = 10.dp, end = 10.dp)
     ) {
-
+        // Open Mihon Button
+        Button(
+            onClick = {
+                // Pass the One Piece MangaDex ID
+                openMihon("a1c7c817-4e59-43b7-9365-09675a149a6f")
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Open One Piece")
+        }
         Row(modifier = Modifier.fillMaxWidth()) {
             TextField(
                 value = query,
