@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.WebAPITutorial_Ktor.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.WebAPITutorial_Ktor.AppWidgetContainer">
+
+    <ImageView
+        android:id="@+id/imgvBookCover"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="false"
+        android:src="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/txtvBookTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="59dp"
+        android:layout_below="@id/imgvBookCover"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="-60dp"
+        android:layout_toEndOf="@+id/imgvBookCover"
+        android:text="Novels (Hobbit / Lord of the Rings)" />
+
+    <Button
+        android:id="@+id/btnOpenMihon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtvBookTitle"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="42dp"
+        android:layout_toEndOf="@+id/h"
+        android:text="Button" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtvBookTitle"
+        android:layout_marginTop="54dp"
+        android:text="Average Readtime:" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtvBookTitle"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="-74dp"
+        android:layout_toEndOf="@+id/textView"
+        android:text="100" />
+
+    <TextView
+        android:id="@+id/h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtvBookTitle"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="54dp"
+        android:layout_toEndOf="@+id/textView2"
+        android:text="h" />
+
+</RelativeLayout>

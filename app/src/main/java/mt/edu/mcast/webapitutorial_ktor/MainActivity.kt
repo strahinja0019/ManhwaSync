@@ -37,9 +37,9 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,9 +58,12 @@ import com.bumptech.glide.integration.compose.placeholder
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import mt.edu.mcast.webapitutorial_ktor.openlibrary.MangaPersistence
 import mt.edu.mcast.webapitutorial_ktor.openlibrary.OpenLibraryRepository
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.WebAPITutorial_KtorTheme
 
+@Serializable
 data class MangaUI(
     val id: String?,
     val title: String?,
@@ -101,18 +104,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun MangaApp(
     modifier: Modifier = Modifier,
     repository: OpenLibraryRepository = remember { OpenLibraryRepository() }
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val startDestination = Destination.SEARCH
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination) }
 
-    // Track favorites globally across all screens
-    val favorites = remember { mutableStateListOf<String>() }
+    // Load persisted favorites from DataStore
+    val savedMangaList by MangaPersistence.getMangaList(context).collectAsState(initial = emptyList())
+
+    val toggleFavorite = { manga: MangaUI ->
+        scope.launch {
+            val updated = if (savedMangaList.any { it.id == manga.id }) {
+                savedMangaList.filter { it.id != manga.id }
+            } else {
+                savedMangaList + manga
+            }
+            MangaPersistence.saveMangaList(context, updated)
+        }
+        Unit
+    }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -121,9 +136,7 @@ fun MangaApp(
                 Destination.entries.forEach { destination ->
                     NavigationBarItem(
                         selected = selectedDestination == destination,
-                        onClick = {
-                            selectedDestination = destination
-                        },
+                        onClick = { selectedDestination = destination },
                         icon = {
                             Icon(
                                 painter = painterResource(id = destination.iconRes),
@@ -140,29 +153,27 @@ fun MangaApp(
         when (selectedDestination) {
             Destination.SAVED -> {
                 SavedMangasScreen(
-                    favorites = favorites,
+                    savedMangaList = savedMangaList,
                     modifier = Modifier.padding(contentPadding),
-                    onOpenMihon = { mangaId -> openMihon(context, mangaId) }
+                    onOpenMihon = { mangaId -> openMihon(context, mangaId) },
+                    onRemove = { manga -> toggleFavorite(manga) }
                 )
             }
             Destination.SEARCH -> {
                 SearchMangasScreen(
                     repository = repository,
-                    favorites = favorites,
+                    savedMangaList = savedMangaList,
                     modifier = Modifier.padding(contentPadding),
-                    onOpenMihon = { mangaId -> openMihon(context, mangaId) }
+                    onOpenMihon = { mangaId -> openMihon(context, mangaId) },
+                    onToggleFavorite = { manga -> toggleFavorite(manga) }
                 )
             }
             Destination.SETTINGS -> {
-                SettingsScreen(
-                    modifier = Modifier.padding(contentPadding)
-                )
+                SettingsScreen(modifier = Modifier.padding(contentPadding))
             }
         }
     }
 }
-
-
 
 private fun openMihon(context: android.content.Context, mangaId: String) {
     try {
@@ -177,13 +188,13 @@ private fun openMihon(context: android.content.Context, mangaId: String) {
     }
 }
 
-
 @Composable
 fun SearchMangasScreen(
     modifier: Modifier = Modifier,
     repository: OpenLibraryRepository,
-    favorites: MutableList<String>,
-    onOpenMihon: (String) -> Unit
+    savedMangaList: List<MangaUI>,
+    onOpenMihon: (String) -> Unit,
+    onToggleFavorite: (MangaUI) -> Unit
 ) {
     var mangaList by remember { mutableStateOf<List<MangaUI>>(emptyList()) }
     var query by remember { mutableStateOf("") }
@@ -219,14 +230,12 @@ fun SearchMangasScreen(
                 modifier = Modifier.weight(1f),
                 singleLine = true
             )
-
             Button(
                 onClick = {
                     scope.launch {
                         isLoading = true
                         loadBooks(query)
                         isLoading = false
-
                         isOnCooldown = true
                         delay(500)
                         isOnCooldown = false
@@ -249,23 +258,13 @@ fun SearchMangasScreen(
                 items = mangaList,
                 key = { it.id ?: it.title ?: it.hashCode() }
             ) { manga ->
-                val isFavorite = favorites.contains(manga.id)
+                val isFavorite = savedMangaList.any { it.id == manga.id }
 
                 MangaSwipeItem(
                     mangaItem = manga,
                     isFavorite = isFavorite,
-                    onToggleFavorite = { currentIsFavorite ->
-                        manga.id?.let { id ->
-                            if (currentIsFavorite) {
-                                favorites.remove(id)
-                            } else {
-                                favorites.add(id)
-                            }
-                        }
-                    },
-                    onItemClick = {
-                        manga.id?.let { id -> onOpenMihon(id) }
-                    }
+                    onToggleFavorite = { onToggleFavorite(manga) },
+                    onItemClick = { manga.id?.let { id -> onOpenMihon(id) } }
                 )
             }
         }
@@ -275,32 +274,49 @@ fun SearchMangasScreen(
 @Composable
 fun SavedMangasScreen(
     modifier: Modifier = Modifier,
-    favorites: List<String>,
-    onOpenMihon: (String) -> Unit
+    savedMangaList: List<MangaUI>,
+    onOpenMihon: (String) -> Unit,
+    onRemove: (MangaUI) -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .padding(top = 16.dp, start = 10.dp, end = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Saved Mangas",
-            style = MaterialTheme.typography.headlineMedium
+            text = "Saved Mangas (${savedMangaList.size})",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 4.dp)
         )
-        Text(
-            text = "You have ${favorites.size} saved mangas",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+
+        if (savedMangaList.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No saved mangas yet", style = MaterialTheme.typography.bodyMedium)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(
+                    items = savedMangaList,
+                    key = { it.id ?: it.hashCode() }
+                ) { manga ->
+                    MangaSwipeItem(
+                        mangaItem = manga,
+                        isFavorite = true,
+                        onToggleFavorite = { onRemove(manga) },
+                        onItemClick = { manga.id?.let { id -> onOpenMihon(id) } }
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun SettingsScreen(
-    modifier: Modifier = Modifier
-) {
+fun SettingsScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -308,10 +324,7 @@ fun SettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Settings",
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Text(text = "Settings", style = MaterialTheme.typography.headlineMedium)
         Text(
             text = "Settings coming soon...",
             style = MaterialTheme.typography.bodyMedium,
@@ -359,12 +372,7 @@ fun MangaSwipeItem(
             } else {
                 Color.hsv(hue = 302f, saturation = 0.681f, value = 0.812f)
             }
-
-            val iconResource = if (isFavorite) {
-                R.drawable.ic_unfavourite
-            } else {
-                R.drawable.ic_favourite
-            }
+            val iconResource = if (isFavorite) R.drawable.ic_unfavourite else R.drawable.ic_favourite
 
             Box(
                 modifier = Modifier
@@ -375,7 +383,7 @@ fun MangaSwipeItem(
             ) {
                 Icon(
                     painter = painterResource(id = iconResource),
-                    contentDescription = if (isFavorite) "Remove Highlight" else "Toggle Highlight",
+                    contentDescription = if (isFavorite) "Remove from saved" else "Save",
                     tint = Color.White
                 )
             }
@@ -386,14 +394,8 @@ fun MangaSwipeItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick() },
-            border = if (isFavorite) {
-                BorderStroke(4.dp, Color.Magenta)
-            } else {
-                BorderStroke(0.dp, Color.Transparent)
-            },
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
+            border = if (isFavorite) BorderStroke(4.dp, Color.Magenta) else BorderStroke(0.dp, Color.Transparent),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Row(
                 modifier = Modifier
@@ -402,7 +404,6 @@ fun MangaSwipeItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-
                 remember(mangaItem.coverUrl) {
                     movableContentOf {
                         GlideImage(

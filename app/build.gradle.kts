@@ -37,10 +37,15 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
 dependencies {
+
+    //dataStore
+    implementation("androidx.datastore:datastore-preferences:1.2.1") // DataStore
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3") // JSON converter
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
