@@ -102,7 +102,7 @@ fun SearchMangasScreen(
                     mangaItem = manga,
                     isFavorite = isFavorite,
                     onToggleFavorite = { onToggleFavorite(manga) },
-                    onItemClick = { manga.id?.let { id -> onOpenMihon(id) } }
+                    onItemClick = { manga.id?.let { id -> onOpenMihon(id) } } //instead of opening in mihon i want to expand the card for more details like tags author
                 )
             }
         }
