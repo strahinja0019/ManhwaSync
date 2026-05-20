@@ -1,7 +1,6 @@
+//MainActivity.kt
 package mt.edu.mcast.webapitutorial_ktor
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -58,6 +57,21 @@ import mt.edu.mcast.webapitutorial_ktor.openlibrary.MangaPersistence
 import mt.edu.mcast.webapitutorial_ktor.openlibrary.OpenLibraryRepository
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.AppTheme
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.WebAPITutorial_KtorTheme
+import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import java.util.Calendar
+
+
 
 @Serializable
 data class MangaUI(
@@ -92,6 +106,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel(notificationManager)
+
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { _ -> }
+        checkFirstTimePermissionLaunch(requestPermissionLauncher)
+
+        setDailyAlarm(applicationContext)
+
         setContent {
             // FIX: Safely collect the user's theme setting here at the root level
             val currentTheme by MangaPersistence.getTheme(this).collectAsState(initial = AppTheme.OCEAN)
@@ -101,6 +126,57 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val infoChannel = NotificationChannel(
+                "info_channel",
+                "Information Channel",
+                NotificationManager.IMPORTANCE_HIGH,
+            )
+            notificationManager.createNotificationChannel(infoChannel)
+        }
+    }
+
+    private fun checkFirstTimePermissionLaunch(launcher: androidx.activity.result.ActivityResultLauncher<String>) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+            val isFirstRun = sharedPreferences.getBoolean("isFirstPermissionRun", true)
+            if (isFirstRun) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                sharedPreferences.edit().putBoolean("isFirstPermissionRun", false).apply()
+            }
+        }
+    }
+
+    companion object {
+        fun setDailyAlarm(context: Context) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val customAlarmAction = "${context.packageName}.ACTION_DAILY_ALARM"
+            val intent = Intent(context, AlarmReceiver::class.java).apply {
+                action = customAlarmAction
+            }
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                1001,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 11)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+            if (calendar.timeInMillis <= System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1)
+            }
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        }
+    }
+
 }
 
 @Composable

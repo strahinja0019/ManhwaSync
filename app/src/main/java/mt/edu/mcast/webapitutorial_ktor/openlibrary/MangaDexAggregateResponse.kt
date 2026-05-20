@@ -1,3 +1,4 @@
+//MangaDexAggregateResponse.kt
 package mt.edu.mcast.webapitutorial_ktor.openlibrary
 
 import kotlinx.serialization.Serializable

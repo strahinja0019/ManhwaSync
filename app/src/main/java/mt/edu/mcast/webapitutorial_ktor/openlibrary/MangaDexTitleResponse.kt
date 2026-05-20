@@ -1,3 +1,4 @@
+//MangaDexTitleResponse.kt
 package mt.edu.mcast.webapitutorial_ktor.openlibrary
 
 import kotlinx.serialization.Serializable
@@ -29,14 +30,9 @@ data class Attributes (
     @SerialName("title"                          ) var title                          : Title?               = Title(),
     @SerialName("altTitles"                      ) var altTitles                      : ArrayList<AltTitles> = arrayListOf(),
     @SerialName("description"                    ) var description                    : Description?         = Description(),
-    @SerialName("isLocked"                       ) var isLocked                       : Boolean?             = null,
-    @SerialName("lastVolume"                     ) var lastVolume                     : String?              = null,
-    @SerialName("lastChapter"                    ) var lastChapter                    : String?              = null,
-    @SerialName("publicationDemographic"         ) var publicationDemographic         : String?              = null,
     @SerialName("tags"                           ) var tags                           : ArrayList<Tags>      = arrayListOf(),
     @SerialName("status"                         ) var status                         : String?              = null,
     @SerialName("year"                           ) var year                           : Int?                 = null,
-    @SerialName("contentRating"                  ) var contentRating                  : String?              = null,
 )
 
 @Serializable
