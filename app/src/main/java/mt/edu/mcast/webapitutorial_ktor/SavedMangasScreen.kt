@@ -50,7 +50,8 @@ fun SavedMangasScreen(
                         mangaItem = manga,
                         isFavorite = true,
                         onToggleFavorite = { onRemove(manga) },
-                        onItemClick = { manga.id?.let { id -> onOpenMihon(id) } }
+                        onItemClick = { manga.id?.let { id -> onOpenMihon(id) } },
+                        showChapterCount = true // Display the pre-cached Room chapter metrics here
                     )
                 }
             }

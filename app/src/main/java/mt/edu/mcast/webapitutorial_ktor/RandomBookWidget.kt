@@ -1,3 +1,4 @@
+//RandomBookWidget.kt
 package mt.edu.mcast.webapitutorial_ktor
 
 import android.app.PendingIntent
@@ -11,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import mt.edu.mcast.webapitutorial_ktor.openlibrary.MangaPersistence
+import mt.edu.mcast.webapitutorial_ktor.database.AppDatabase
 
 class RandomBookWidget : AppWidgetProvider() {
     override fun onUpdate(
@@ -36,14 +37,17 @@ internal fun updateAppWidget(
     val views = RemoteViews(context.packageName, R.layout.random_book_widget)
 
     CoroutineScope(Dispatchers.IO).launch {
-        // No network — reads from DataStore on disk
-        val mangaList = MangaPersistence.getMangaList(context).first()
-        val manga = mangaList.firstOrNull()
+        // 1. Get Room database instance and read the saved list out of the Flow stream
+        val database = AppDatabase.getDatabase(context.applicationContext)
+        val savedEntities = database.mangaDao().getAllSavedMangas().first()
+
+        // 2. Pick a manga entity from the collection (or select a random one)
+        val entity = savedEntities.shuffled().firstOrNull()
 
         withContext(Dispatchers.Main) {
-            if (manga != null) {
-                val mangaId = manga.id ?: ""
-                val title = manga.title ?: "Unknown Title"
+            if (entity != null) {
+                val mangaId = entity.id
+                val title = entity.title
 
                 views.setTextViewText(R.id.txtvBookTitle, title)
 
@@ -63,6 +67,9 @@ internal fun updateAppWidget(
                 views.setOnClickPendingIntent(R.id.btnOpenMihon, pendingIntent)
             } else {
                 views.setTextViewText(R.id.txtvBookTitle, "No saved manga")
+
+                // Clear click action if no manga exists
+                views.setOnClickPendingIntent(R.id.btnOpenMihon, null)
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

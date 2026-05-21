@@ -92,6 +92,7 @@ fun SearchMangasScreen(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Inside LazyColumn items block of SearchMangasScreen.kt
             items(
                 items = mangaList,
                 key = { it.id ?: it.title ?: it.hashCode() }
@@ -102,7 +103,11 @@ fun SearchMangasScreen(
                     mangaItem = manga,
                     isFavorite = isFavorite,
                     onToggleFavorite = { onToggleFavorite(manga) },
-                    onItemClick = { manga.id?.let { id -> onOpenMihon(id) } } //instead of opening in mihon i want to expand the card for more details like tags author
+                    onItemClick = {
+                        // Instead of opening in Mihon immediately, you can add code here
+                        // to display tags/authors or show a detailed view modal.
+                    },
+                    showChapterCount = false // Do not display chapter numbers on Search layout rows
                 )
             }
         }

@@ -1,16 +1,27 @@
-//MainActivity.kt
 package mt.edu.mcast.webapitutorial_ktor
 
+import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,6 +58,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
@@ -57,27 +69,14 @@ import mt.edu.mcast.webapitutorial_ktor.openlibrary.MangaPersistence
 import mt.edu.mcast.webapitutorial_ktor.openlibrary.OpenLibraryRepository
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.AppTheme
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.WebAPITutorial_KtorTheme
-import android.Manifest
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.os.Build
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import java.util.Calendar
-
-
 
 @Serializable
 data class MangaUI(
     val id: String?,
     val title: String?,
-    val coverUrl: String?
+    val coverUrl: String?,
+    val chapterCount: Int? = null // Room will inject this value into your Saved Screen layout card
 )
 
 enum class Destination(
@@ -103,6 +102,7 @@ enum class Destination(
 }
 
 class MainActivity : ComponentActivity() {
+    // Inside MainActivity.kt -> Update onCreate to initialize Room
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -117,12 +117,15 @@ class MainActivity : ComponentActivity() {
 
         setDailyAlarm(applicationContext)
 
+        // INITIALIZE ROOM DB & REPOSITORY ENGINE HERE:
+        val database = mt.edu.mcast.webapitutorial_ktor.database.AppDatabase.getDatabase(applicationContext)
+        val repository = OpenLibraryRepository(database.mangaDao())
+
         setContent {
-            // FIX: Safely collect the user's theme setting here at the root level
             val currentTheme by MangaPersistence.getTheme(this).collectAsState(initial = AppTheme.OCEAN)
 
             WebAPITutorial_KtorTheme(appTheme = currentTheme) {
-                MangaApp(currentTheme = currentTheme)
+                MangaApp(currentTheme = currentTheme, repository = repository)
             }
         }
     }
@@ -140,10 +143,15 @@ class MainActivity : ComponentActivity() {
 
     private fun checkFirstTimePermissionLaunch(launcher: androidx.activity.result.ActivityResultLauncher<String>) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val sharedPreferences: SharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+            val sharedPreferences: SharedPreferences =
+                getSharedPreferences("AppPrefs", MODE_PRIVATE)
             val isFirstRun = sharedPreferences.getBoolean("isFirstPermissionRun", true)
             if (isFirstRun) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
                 sharedPreferences.edit().putBoolean("isFirstPermissionRun", false).apply()
@@ -176,31 +184,30 @@ class MainActivity : ComponentActivity() {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
         }
     }
-
 }
 
 @Composable
 fun MangaApp(
     currentTheme: AppTheme,
     modifier: Modifier = Modifier,
-    repository: OpenLibraryRepository = remember { OpenLibraryRepository() }
+    repository: OpenLibraryRepository
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val startDestination = Destination.SEARCH
     var selectedDestination by rememberSaveable { mutableStateOf(startDestination) }
 
-    // Load persisted favorites from DataStore
-    val savedMangaList by MangaPersistence.getMangaList(context).collectAsState(initial = emptyList())
+    // REAL-TIME ROOM COUPLING STREAM:
+    val savedMangaList by repository.savedMangasStream.collectAsState(initial = emptyList())
 
     val toggleFavorite = { manga: MangaUI ->
         scope.launch {
-            val updated = if (savedMangaList.any { it.id == manga.id }) {
-                savedMangaList.filter { it.id != manga.id }
+            val isAlreadyFavorite = savedMangaList.any { it.id == manga.id }
+            if (isAlreadyFavorite) {
+                manga.id?.let { repository.removeFromFavorites(context, it) } // Pass context here
             } else {
-                savedMangaList + manga
+                repository.saveToFavorites(context, manga) // Pass context here
             }
-            MangaPersistence.saveMangaList(context, updated)
         }
         Unit
     }
@@ -278,7 +285,8 @@ fun MangaSwipeItem(
     mangaItem: MangaUI,
     isFavorite: Boolean,
     onToggleFavorite: (isFavorite: Boolean) -> Unit,
-    onItemClick: () -> Unit
+    onItemClick: () -> Unit,
+    showChapterCount: Boolean = false // Toggle to conditionally render chapter metrics
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { false },
@@ -339,7 +347,7 @@ fun MangaSwipeItem(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
@@ -358,12 +366,23 @@ fun MangaSwipeItem(
                         }
                     }
                 }.invoke()
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = mangaItem.title ?: "No title",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    )
 
-                Text(
-                    text = mangaItem.title ?: "No title",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
-                )
+                    // Conditionally display chapter metric rows on the Saved Screen
+                    if (showChapterCount) {
+                        androidx.compose.foundation.layout.Spacer(modifier = Modifier.size(4.dp))
+                        Text(
+                            text = "Chapters: ${mangaItem.chapterCount ?: "Unknown"}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.Cyan
+                        )
+                    }
+                }
             }
         }
     }
