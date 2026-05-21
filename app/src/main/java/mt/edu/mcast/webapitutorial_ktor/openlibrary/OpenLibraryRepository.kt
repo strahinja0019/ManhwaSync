@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.map
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes
 import java.io.File
 import java.io.FileOutputStream

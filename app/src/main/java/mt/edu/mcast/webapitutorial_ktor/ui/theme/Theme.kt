@@ -1,10 +1,10 @@
+//Theme.kt
 package mt.edu.mcast.webapitutorial_ktor.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import mt.edu.mcast.webapitutorial_ktor.ui.theme.AppTheme
 
 @Composable
 fun WebAPITutorial_KtorTheme(
@@ -17,6 +17,7 @@ fun WebAPITutorial_KtorTheme(
         AppTheme.EMERALD -> if (darkTheme) EmeraldDarkScheme else EmeraldLightScheme
         AppTheme.OCEAN   -> if (darkTheme) OceanDarkScheme   else OceanLightScheme
         AppTheme.MONO    -> if (darkTheme) MonoDarkScheme     else MonoLightScheme
+        AppTheme.SECRET  -> if (darkTheme) SecretDarkScheme   else  SecretLightScheme
     }
 
     MaterialTheme(

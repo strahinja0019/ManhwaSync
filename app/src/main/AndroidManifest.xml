@@ -26,6 +26,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/random_book_widget_info" />
         </receiver>
+
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"

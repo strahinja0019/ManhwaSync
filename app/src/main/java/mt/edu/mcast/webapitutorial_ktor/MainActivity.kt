@@ -118,11 +118,13 @@ class MainActivity : ComponentActivity() {
         setDailyAlarm(applicationContext)
 
         // INITIALIZE ROOM DB & REPOSITORY ENGINE HERE:
-        val database = mt.edu.mcast.webapitutorial_ktor.database.AppDatabase.getDatabase(applicationContext)
+        val database =
+            mt.edu.mcast.webapitutorial_ktor.database.AppDatabase.getDatabase(applicationContext)
         val repository = OpenLibraryRepository(database.mangaDao())
 
         setContent {
-            val currentTheme by MangaPersistence.getTheme(this).collectAsState(initial = AppTheme.OCEAN)
+            val currentTheme by MangaPersistence.getTheme(this)
+                .collectAsState(initial = AppTheme.OCEAN)
 
             WebAPITutorial_KtorTheme(appTheme = currentTheme) {
                 MangaApp(currentTheme = currentTheme, repository = repository)
@@ -242,6 +244,7 @@ fun MangaApp(
                     onRemove = { manga -> toggleFavorite(manga) }
                 )
             }
+
             Destination.SEARCH -> {
                 SearchMangasScreen(
                     repository = repository,
@@ -251,6 +254,7 @@ fun MangaApp(
                     onToggleFavorite = { manga -> toggleFavorite(manga) }
                 )
             }
+
             Destination.SETTINGS -> {
                 SettingsScreen(
                     modifier = Modifier.padding(contentPadding),
@@ -279,6 +283,7 @@ private fun openMihon(context: Context, mangaId: String) {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun MangaSwipeItem(
@@ -286,7 +291,8 @@ fun MangaSwipeItem(
     isFavorite: Boolean,
     onToggleFavorite: (isFavorite: Boolean) -> Unit,
     onItemClick: () -> Unit,
-    showChapterCount: Boolean = false // Toggle to conditionally render chapter metrics
+    showChapterCount: Boolean = false,
+    trailingContent: (@Composable () -> Unit)? = null // optional slot
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { false },
@@ -319,7 +325,8 @@ fun MangaSwipeItem(
             } else {
                 Color.hsv(hue = 302f, saturation = 0.681f, value = 0.812f)
             }
-            val iconResource = if (isFavorite) R.drawable.ic_unfavourite else R.drawable.ic_favourite
+            val iconResource =
+                if (isFavorite) R.drawable.ic_unfavourite else R.drawable.ic_favourite
 
             Box(
                 modifier = Modifier
@@ -341,7 +348,10 @@ fun MangaSwipeItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick() },
-            border = if (isFavorite) BorderStroke(4.dp, Color.Magenta) else BorderStroke(0.dp, Color.Transparent),
+            border = if (isFavorite) BorderStroke(4.dp, Color.Magenta) else BorderStroke(
+                0.dp,
+                Color.Transparent
+            ),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
         ) {
             Row(
@@ -350,14 +360,21 @@ fun MangaSwipeItem(
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
+            )
+            {
                 remember(mangaItem.coverUrl) {
                     movableContentOf {
                         GlideImage(
                             modifier = Modifier.size(85.dp),
                             model = mangaItem.coverUrl,
                             contentDescription = "Book Cover",
-                            loading = placeholder { CircularProgressIndicator(modifier = Modifier.size(24.dp)) },
+                            loading = placeholder {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(
+                                        24.dp
+                                    )
+                                )
+                            },
                             contentScale = ContentScale.Crop
                         ) {
                             it.diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -383,6 +400,13 @@ fun MangaSwipeItem(
                         )
                     }
                 }
+            }
+
+            if (trailingContent != null) {
+                Box(modifier = Modifier.padding(start = 8.dp)) {
+                    trailingContent()
+                }
+
             }
         }
     }

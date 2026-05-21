@@ -1,3 +1,4 @@
+//MangaEntity.kt
 package mt.edu.mcast.webapitutorial_ktor.database
 
 import androidx.room.Entity
