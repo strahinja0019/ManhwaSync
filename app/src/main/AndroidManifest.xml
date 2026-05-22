@@ -17,10 +17,11 @@
         android:theme="@style/Theme.WebAPITutorial_Ktor">
         <receiver
             android:name=".RandomBookWidget"
-            android:exported="false">
+            android:exported="true">
+            <!-- CHANGED: android:exported="true" so ADB can talk to it -->
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+                 </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"

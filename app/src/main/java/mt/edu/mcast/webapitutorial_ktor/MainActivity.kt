@@ -69,6 +69,7 @@ import mt.edu.mcast.webapitutorial_ktor.openlibrary.MangaPersistence
 import mt.edu.mcast.webapitutorial_ktor.openlibrary.OpenLibraryRepository
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.AppTheme
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.WebAPITutorial_KtorTheme
+import mt.edu.mcast.webapitutorial_ktor.ui.theme.getPrimaryColor
 import java.util.Calendar
 
 @Serializable
@@ -321,12 +322,10 @@ fun MangaSwipeItem(
         enableDismissFromEndToStart = true,
         backgroundContent = {
             val backgroundColor = if (isFavorite) {
-                Color.hsv(hue = 0f, saturation = 0.4f, value = 0.4f)
+                MaterialTheme.colorScheme.secondary
             } else {
-                Color.hsv(hue = 302f, saturation = 0.681f, value = 0.812f)
+                MaterialTheme.colorScheme.primary
             }
-            val iconResource =
-                if (isFavorite) R.drawable.ic_unfavourite else R.drawable.ic_favourite
 
             Box(
                 modifier = Modifier
@@ -336,9 +335,9 @@ fun MangaSwipeItem(
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Icon(
-                    painter = painterResource(id = iconResource),
+                    painter = painterResource(id = if (isFavorite) R.drawable.ic_unfavourite else R.drawable.ic_favourite),
                     contentDescription = if (isFavorite) "Remove from saved" else "Save",
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.secondaryContainer
                 )
             }
         },
@@ -348,11 +347,11 @@ fun MangaSwipeItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick() },
-            border = if (isFavorite) BorderStroke(4.dp, Color.Magenta) else BorderStroke(
+            border = if (isFavorite) BorderStroke(4.dp, MaterialTheme.colorScheme.primary) else BorderStroke(
                 0.dp,
                 Color.Transparent
             ),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
         ) {
             Row(
                 modifier = Modifier
@@ -396,7 +395,7 @@ fun MangaSwipeItem(
                         Text(
                             text = "Chapters: ${mangaItem.chapterCount ?: "Unknown"}",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Cyan
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }

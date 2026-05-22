@@ -8,13 +8,13 @@ val secretonPrimaryLight = Color(0xFFFFFFFF)
 val secretprimaryContainerLight = Color(0xFFFF9FB3)  // lighter pink
 val secretonPrimaryContainerLight = Color(0xFF3B0A0F)
 
-val secretsecondaryLight = Color(0xFFFFD166)          // warm sunny yellow
+val secretsecondaryLight = Color(0xFF6AD7FF)          // warm sunny yellow
 val secretonSecondaryLight = Color(0xFF2B1600)
 val secretsecondaryContainerLight = Color(0xFFFFE59A)
 val secretonSecondaryContainerLight = Color(0xFF4B3200)
 
-val secrettertiaryLight = Color(0xFF6AD7FF)           // baby blue
-val secretonTertiaryLight = Color(0xFF002533)
+val secrettertiaryLight = Color(0xFF002533)           // baby blue
+val secretonTertiaryLight = Color(0xFFFFD166)
 val secrettertiaryContainerLight = Color(0xFFBEEFFF)
 val secretonTertiaryContainerLight = Color(0xFF00202B)
 
@@ -51,12 +51,12 @@ val secretonPrimaryDark = Color(0xFF440011)
 val secretprimaryContainerDark = Color(0xFF7F2130)
 val secretonPrimaryContainerDark = Color(0xFFFFEAF0)
 
-val secretsecondaryDark = Color(0xFFFFD88A)
+val secretsecondaryDark = Color(0xFF7FD6FF)
 val secretonSecondaryDark = Color(0xFF352000)
 val secretsecondaryContainerDark = Color(0xFF6A4B00)
 val secretonSecondaryContainerDark = Color(0xFFFFF7E3)
 
-val secrettertiaryDark = Color(0xFF7FD6FF)
+val secrettertiaryDark = Color(0xFFFFD88A)
 val secretonTertiaryDark = Color(0xFF002433)
 val secrettertiaryContainerDark = Color(0xFF135A6E)
 val secretonTertiaryContainerDark = Color(0xFFEFFBFF)

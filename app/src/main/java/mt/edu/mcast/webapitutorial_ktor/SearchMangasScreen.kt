@@ -103,10 +103,7 @@ fun SearchMangasScreen(
                     mangaItem = manga,
                     isFavorite = isFavorite,
                     onToggleFavorite = { onToggleFavorite(manga) },
-                    onItemClick = {
-                        // Instead of opening in Mihon immediately, you can add code here
-                        // to display tags/authors or show a detailed view modal.
-                    },
+                    onItemClick = {manga.id?.let { id -> onOpenMihon(id) } },
                     showChapterCount = false // Do not display chapter numbers on Search layout rows
                 )
             }

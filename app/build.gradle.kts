@@ -44,6 +44,9 @@ android {
 
 dependencies {
 
+    //work manager
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+
     //dataStore
     implementation("androidx.datastore:datastore-preferences:1.2.1") // DataStore
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3") // JSON converter

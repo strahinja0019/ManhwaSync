@@ -19,4 +19,7 @@ interface MangaDao {
 
     @Query("DELETE FROM saved_mangas WHERE id = :mangaId")
     suspend fun deleteMangaById(mangaId: String)
+
+    @Query("SELECT * FROM saved_mangas ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomManga(): MangaEntity?
 }

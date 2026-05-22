@@ -29,10 +29,6 @@ data class Attributes (
 
     @SerialName("title"                          ) var title                          : Title?               = Title(),
     @SerialName("altTitles"                      ) var altTitles                      : ArrayList<AltTitles> = arrayListOf(),
-    @SerialName("description"                    ) var description                    : Description?         = Description(),
-    @SerialName("tags"                           ) var tags                           : ArrayList<Tags>      = arrayListOf(),
-    @SerialName("status"                         ) var status                         : String?              = null,
-    @SerialName("year"                           ) var year                           : Int?                 = null,
 )
 
 @Serializable
@@ -58,39 +54,8 @@ data class AltTitles (
 )
 
 @Serializable
-data class Description (
-
-    @SerialName("en"    ) var englishDescription    : String? = null,
-
-)
-
-@Serializable
 data class RelationshipsAttribute (
 
     @SerialName("fileName"       ) var fileName       : String?      = null
-
-)
-
-
-@Serializable
-data class Tags (
-
-    @SerialName("attributes"    ) var tagAttributes: TagsAttribute? = TagsAttribute()
-
-)
-
-
-
-@Serializable
-data class TagsAttribute (
-
-    @SerialName("name"        ) var tagAttributeName        : TagAttributeName?        = TagAttributeName()
-
-)
-
-@Serializable
-data class TagAttributeName (
-
-    @SerialName("en" ) var relationshipsAttribute : String? = null
 
 )

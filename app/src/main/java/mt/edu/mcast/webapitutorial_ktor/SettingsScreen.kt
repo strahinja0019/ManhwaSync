@@ -1,10 +1,13 @@
 package mt.edu.mcast.webapitutorial_ktor
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.widget.Button
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,10 +30,14 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.CrimsonDarkScheme
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.EmeraldDarkScheme
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.MonoDarkScheme
 import mt.edu.mcast.webapitutorial_ktor.ui.theme.OceanDarkScheme
+import mt.edu.mcast.webapitutorial_ktor.ui.theme.getPrimaryColor
 import kotlin.math.sqrt
 
 @Composable
@@ -39,6 +46,7 @@ fun SettingsScreen(
     currentTheme: AppTheme,
     onThemeChange: (AppTheme) -> Unit
 ) {
+    val context = LocalContext.current
 
     ShakeTriggerScreen(
         onShakeDetected = {
@@ -62,13 +70,6 @@ fun SettingsScreen(
                 if (theme != AppTheme.SECRET) {
 
                     // 1. Dynamic variable mapping each enum to a specific theme color token
-                    val dynamicColor = when (theme) {
-                        AppTheme.CRIMSON -> CrimsonDarkScheme.primary
-                        AppTheme.EMERALD -> EmeraldDarkScheme.primary
-                        AppTheme.OCEAN -> OceanDarkScheme.primary
-                        AppTheme.MONO -> MonoDarkScheme.primary
-                        else -> {}
-                    }
 
                     // 2. Fixed conditional modifier layout sizing and border
                     val buttonModifier = if (theme.displayName == currentTheme.displayName) {
@@ -89,14 +90,56 @@ fun SettingsScreen(
                     Button(
                         onClick = { onThemeChange(theme) },
                         modifier = buttonModifier,
-                        colors = ButtonDefaults.buttonColors(containerColor = dynamicColor as Color)
+                        colors = ButtonDefaults.buttonColors(containerColor = theme.getPrimaryColor { primary })
                     ) {
                         Text(theme.displayName)
                     }
                 }
             }
         }
+        // to test it with a command do
+        /*
+        & $env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe -s emulator-5554 shell am broadcast -a android.appwidget.action.APPWIDGET_UPDATE --eia appWidgetIds 6 -n mt.edu.mcast.webapitutorial_ktor/.RandomBookWidget
+         */
+
+        //This is to test it with a button by manually sending the request
+        Button(
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+            onClick = {
+                android.util.Log.d("WidgetTest", "Manual updateRequest call")
+
+                val updateRequest = OneTimeWorkRequestBuilder<WidgetUpdateWorker>().build()
+                WorkManager.getInstance(context).enqueueUniqueWork(
+                    "WidgetManualTest",
+                    ExistingWorkPolicy.REPLACE,
+                    updateRequest
+                )
+                android.util.Log.d("WidgetTest", "Enqueued one-time worker for testing")
+            },
+            modifier = Modifier.padding(top = 24.dp)
+        ) {
+            Text("Test Widget Manual updateRequest")
+        }
+
+        Button(
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+            onClick = {
+            android.util.Log.d("WidgetTest", "Manual WidgetManager setup")
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val thisWidget = android.content.ComponentName(context, RandomBookWidget::class.java)
+            val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
+            val intent = Intent(context, RandomBookWidget::class.java).apply {
+                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
+            }
+            context.sendBroadcast(intent)
+        }) {
+            Text("Test Widget Manual WidgetManager")
+        }
+
+
     }
+
 }
 
 
@@ -137,8 +180,8 @@ class ShakeDetector(private val onShake: () -> Unit) : SensorEventListener {
     }
 
     companion object {
-        private const val SHAKE_THRESHOLD_G_FORCE = 3.5f
-        private const val SHAKE_SLOP_TIME_MS = 5000
+        private const val SHAKE_THRESHOLD_G_FORCE = 2.7f
+        private const val SHAKE_SLOP_TIME_MS = 3000
     }
 }
 

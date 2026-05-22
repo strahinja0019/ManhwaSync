@@ -6,7 +6,7 @@
     android:theme="@style/Theme.WebAPITutorial_Ktor.AppWidgetContainer">
 
     <ImageView
-        android:id="@+id/imgvBookCover"
+        android:id="@+id/imgManhwaLogo"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_alignParentLeft="true"
@@ -18,10 +18,10 @@
         android:id="@+id/txtvBookTitle"
         android:layout_width="wrap_content"
         android:layout_height="59dp"
-        android:layout_below="@id/imgvBookCover"
+        android:layout_below="@id/imgManhwaLogo"
         android:layout_marginStart="36dp"
         android:layout_marginTop="-60dp"
-        android:layout_toEndOf="@+id/imgvBookCover"
+        android:layout_toEndOf="@+id/imgManhwaLogo"
         android:text="Manhwa Title" />
 
     <Button
@@ -43,7 +43,7 @@
         android:text="Average Readtime:" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/hourNeeded"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/txtvBookTitle"
@@ -59,7 +59,7 @@
         android:layout_below="@+id/txtvBookTitle"
         android:layout_marginStart="0dp"
         android:layout_marginTop="54dp"
-        android:layout_toEndOf="@+id/textView2"
+        android:layout_toEndOf="@+id/hourNeeded"
         android:text="h" />
 
 </RelativeLayout>
