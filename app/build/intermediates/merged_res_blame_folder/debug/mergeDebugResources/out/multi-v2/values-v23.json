@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.strahinja0019.manhwasync.app-mergeDebugResources-40:/values-v23/values-v23.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\lilic\\.gradle\\caches\\8.13\\transforms\\b9f87fce6570f2d6f46d9fd0bdbdca4a\\transformed\\work-runtime-2.9.0\\res\\values-v23\\values-v23.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,121",
+                        "endColumns": "65,62",
+                        "endOffsets": "116,179"
+                    }
+                }
+            ]
+        }
+    ]
+}

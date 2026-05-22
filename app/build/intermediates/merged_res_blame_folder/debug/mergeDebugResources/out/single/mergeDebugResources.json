@@ -1,0 +1,114 @@
+[
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_favourite.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_favourite.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_unfavourite.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_unfavourite.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_saved.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_saved.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable-v21_app_widget_background.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable-v21/app_widget_background.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/xml_data_extraction_rules.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_search.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_search.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable-v21_app_widget_inner_view_background.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable-v21/app_widget_inner_view_background.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/xml_backup_rules.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-debug-42:\\xml_random_manhwa_widget_info.xml.flat",
+        "source": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-main-44:\\xml\\random_manhwa_widget_info.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_manhwasync.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/manhwasync.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable-nodpi_example_appwidget_preview.png.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable-nodpi/example_appwidget_preview.png"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_settings.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_arrowdropdown.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_arrowdropdown.xml"
+    },
+    {
+        "merged": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-debug-42:\\layout_random_manhwa_widget.xml.flat",
+        "source": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-main-44:\\layout\\random_manhwa_widget.xml"
+    }
+]
