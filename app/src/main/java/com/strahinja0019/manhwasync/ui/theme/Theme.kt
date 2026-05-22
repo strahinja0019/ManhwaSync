@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun WebAPITutorial_KtorTheme(
+fun ManhwaSyncTheme(
     appTheme: AppTheme = AppTheme.OCEAN,
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit

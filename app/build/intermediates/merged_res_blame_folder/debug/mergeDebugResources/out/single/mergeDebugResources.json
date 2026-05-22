@@ -44,6 +44,14 @@
         "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xxhdpi/ic_launcher_round.webp"
     },
     {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/layout_random_manhwa_widget.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/layout/random_manhwa_widget.xml"
+    },
+    {
+        "merged": "com.strahinja0019.manhwasync.app-debug-42:/xml_random_manhwa_widget_info.xml.flat",
+        "source": "com.strahinja0019.manhwasync.app-main-44:/xml/random_manhwa_widget_info.xml"
+    },
+    {
         "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable-v21_app_widget_inner_view_background.xml.flat",
         "source": "com.strahinja0019.manhwasync.app-main-44:/drawable-v21/app_widget_inner_view_background.xml"
     },
@@ -76,10 +84,6 @@
         "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-xxxhdpi/ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-debug-42:\\xml_random_manhwa_widget_info.xml.flat",
-        "source": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-main-44:\\xml\\random_manhwa_widget_info.xml"
-    },
-    {
         "merged": "com.strahinja0019.manhwasync.app-debug-42:/mipmap-hdpi_ic_launcher.webp.flat",
         "source": "com.strahinja0019.manhwasync.app-main-44:/mipmap-hdpi/ic_launcher.webp"
     },
@@ -106,9 +110,5 @@
     {
         "merged": "com.strahinja0019.manhwasync.app-debug-42:/drawable_ic_arrowdropdown.xml.flat",
         "source": "com.strahinja0019.manhwasync.app-main-44:/drawable/ic_arrowdropdown.xml"
-    },
-    {
-        "merged": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-debug-42:\\layout_random_manhwa_widget.xml.flat",
-        "source": "C:\\Users\\lilic\\.gradle\\daemon\\8.13\\com.strahinja0019.manhwasync.app-main-44:\\layout\\random_manhwa_widget.xml"
     }
 ]

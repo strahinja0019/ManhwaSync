@@ -70,7 +70,7 @@ import kotlinx.serialization.Serializable
 import com.strahinja0019.manhwasync.database.DataStoreTheme
 import com.strahinja0019.manhwasync.mangadex.MangaDexRepository
 import com.strahinja0019.manhwasync.ui.theme.AppTheme
-import com.strahinja0019.manhwasync.ui.theme.WebAPITutorial_KtorTheme
+import com.strahinja0019.manhwasync.ui.theme.ManhwaSyncTheme
 import java.util.Calendar
 
 @Serializable
@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity() {
             val currentTheme by DataStoreTheme.getTheme(this)
                 .collectAsState(initial = AppTheme.OCEAN)
 
-            WebAPITutorial_KtorTheme(appTheme = currentTheme) {
+            ManhwaSyncTheme(appTheme = currentTheme) {
                 ManhwaApp(currentTheme = currentTheme, repository = repository)
             }
         }

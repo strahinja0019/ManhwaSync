@@ -4,22 +4,22 @@
             "outputFile": "com.strahinja0019.manhwasync.app-mergeDebugResources-40:/values-v21/values-v21.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\lilic\\AndroidStudioProjects\\ManhwaSync\\app\\src\\main\\res\\values-v21\\styles.xml",
+                    "source": "C:\\Users\\lilic\\AndroidStudioProjects\\manhwaTest\\app\\src\\main\\res\\values-v21\\styles.xml",
                     "from": {
                         "startLines": "2,8",
                         "startColumns": "4,4",
-                        "startOffsets": "19,337",
+                        "startOffsets": "19,328",
                         "endLines": "6,12",
                         "endColumns": "12,12",
-                        "endOffsets": "329,673"
+                        "endOffsets": "320,655"
                     },
                     "to": {
                         "startLines": "2,7",
                         "startColumns": "4,4",
-                        "startOffsets": "55,366",
+                        "startOffsets": "55,357",
                         "endLines": "6,11",
                         "endColumns": "12,12",
-                        "endOffsets": "361,698"
+                        "endOffsets": "352,680"
                     }
                 }
             ]

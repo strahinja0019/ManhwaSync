@@ -41,11 +41,11 @@ string add_widget
 string app_name
 string app_widget_description
 string appwidget_text
-style Theme.WebAPITutorial_Ktor
-style Theme.WebAPITutorial_Ktor.AppWidgetContainer
-style Theme.WebAPITutorial_Ktor.AppWidgetContainerParent
-style Widget.WebAPITutorial_Ktor.AppWidget.Container
-style Widget.WebAPITutorial_Ktor.AppWidget.InnerView
+style Theme.ManhwaSync
+style Theme.ManhwaSync.AppWidgetContainer
+style Theme.ManhwaSync.AppWidgetContainerParent
+style Widget.ManhwaSync.AppWidget.Container
+style Widget.ManhwaSync.AppWidget.InnerView
 styleable AppWidgetAttrs appWidgetPadding appWidgetInnerRadius appWidgetRadius
 xml backup_rules
 xml data_extraction_rules

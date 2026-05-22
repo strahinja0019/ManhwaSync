@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "WebAPITutorial_Ktor"
+rootProject.name = "ManhwaSync"
 include(":app")
  

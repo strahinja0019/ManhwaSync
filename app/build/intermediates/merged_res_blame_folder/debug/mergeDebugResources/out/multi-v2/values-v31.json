@@ -4,14 +4,33 @@
             "outputFile": "com.strahinja0019.manhwasync.app-mergeDebugResources-40:/values-v31/values-v31.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\lilic\\AndroidStudioProjects\\ManhwaSync\\app\\src\\main\\res\\values-v31\\themes.xml",
+                    "source": "C:\\Users\\lilic\\AndroidStudioProjects\\manhwaTest\\app\\src\\main\\res\\values-v31\\styles.xml",
+                    "from": {
+                        "startLines": "2,9",
+                        "startColumns": "4,4",
+                        "startOffsets": "19,384",
+                        "endLines": "7,14",
+                        "endColumns": "12,12",
+                        "endOffsets": "376,767"
+                    },
+                    "to": {
+                        "startLines": "6,12",
+                        "startColumns": "4,4",
+                        "startOffsets": "372,729",
+                        "endLines": "11,17",
+                        "endColumns": "12,12",
+                        "endOffsets": "724,1107"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\lilic\\AndroidStudioProjects\\manhwaTest\\app\\src\\main\\res\\values-v31\\themes.xml",
                     "from": {
                         "startLines": "6",
                         "startColumns": "4",
                         "startOffsets": "256",
                         "endLines": "9",
                         "endColumns": "12",
-                        "endOffsets": "580"
+                        "endOffsets": "571"
                     },
                     "to": {
                         "startLines": "2",
@@ -19,26 +38,7 @@
                         "startOffsets": "55",
                         "endLines": "5",
                         "endColumns": "12",
-                        "endOffsets": "376"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\lilic\\AndroidStudioProjects\\ManhwaSync\\app\\src\\main\\res\\values-v31\\styles.xml",
-                    "from": {
-                        "startLines": "2,9",
-                        "startColumns": "4,4",
-                        "startOffsets": "19,393",
-                        "endLines": "7,14",
-                        "endColumns": "12,12",
-                        "endOffsets": "385,785"
-                    },
-                    "to": {
-                        "startLines": "6,12",
-                        "startColumns": "4,4",
-                        "startOffsets": "381,747",
-                        "endLines": "11,17",
-                        "endColumns": "12,12",
-                        "endOffsets": "742,1134"
+                        "endOffsets": "367"
                     }
                 }
             ]

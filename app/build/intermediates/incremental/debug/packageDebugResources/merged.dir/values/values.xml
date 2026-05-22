@@ -17,22 +17,22 @@
     <string name="app_name">ManhwaSync</string>
     <string name="app_widget_description">This is an app widget description</string>
     <string name="appwidget_text">EXAMPLE</string>
-    <style name="Theme.WebAPITutorial_Ktor" parent="android:Theme.Material.Light.NoActionBar"/>
-    <style name="Theme.WebAPITutorial_Ktor.AppWidgetContainer" parent="Theme.WebAPITutorial_Ktor.AppWidgetContainerParent">
+    <style name="Theme.ManhwaSync" parent="android:Theme.Material.Light.NoActionBar"/>
+    <style name="Theme.ManhwaSync.AppWidgetContainer" parent="Theme.ManhwaSync.AppWidgetContainerParent">
         
         <item name="appWidgetPadding">16dp</item>
     </style>
-    <style name="Theme.WebAPITutorial_Ktor.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+    <style name="Theme.ManhwaSync.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
         
         <item name="appWidgetRadius">16dp</item>
         
         <item name="appWidgetInnerRadius">8dp</item>
     </style>
-    <style name="Widget.WebAPITutorial_Ktor.AppWidget.Container" parent="android:Widget">
+    <style name="Widget.ManhwaSync.AppWidget.Container" parent="android:Widget">
         <item name="android:id">@android:id/background</item>
         <item name="android:background">?android:attr/colorBackground</item>
     </style>
-    <style name="Widget.WebAPITutorial_Ktor.AppWidget.InnerView" parent="android:Widget">
+    <style name="Widget.ManhwaSync.AppWidget.InnerView" parent="android:Widget">
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
